@@ -1,9 +1,9 @@
 #include <Servo.h>
 
-const int In1_A = 6;  //A_output1
-const int In2_A = 7;  //A_output2
-const int In1_B = 8;  //B_output1
-const int In2_B = 9;  //B_output2
+const int In1_A = 1;  //A_output1
+const int In2_A = 2;  //A_output2
+const int In1_B = 3;  //B_output1
+const int In2_B = 4;  //B_output2
 #define L298N_ENA 10  //for L298N_A PWM signal
 #define L298N_ENB 11  //for L298N_B PWM signal
 Servo myservo;       //test dervo 
@@ -23,33 +23,34 @@ void setup(){
   pinMode(In2_B, OUTPUT);
   pinMode(L298N_ENB, OUTPUT);  
 
-  myservo.attach(9);      //test servo pin
-  half_moon.attach(3);
-  push_servo.attach(5);
-  catch_servo.attach(6);
+  myservo.attach(5);      //test servo pin
+  half_moon.attach(6);
+  push_servo.attach(7);
+  catch_servo.attach(8);
 }
 
 void loop(){
-  //test
+  // test
   // zero_servo();
-  //gogogo
+  // gogogo
+  PIKACHU();
   half_moon_control();//設定仰角角度
-  delay(10000);
+  // delay(10000);
   // catch_servo_control();//將球抓下來
   // push_motor_control();//推出去
-      //射出去
+  //射出去
 }
 
-void half_moon_control(){
+void half_moon_control(){   //0~65
   while(Serial.available()==0){
     Serial.println("set your department angle: ");  //print message
     delay(1000);//delay
   }
   delay(1000);//delay
-  n = Serial.parseInt();//input the angle
+  int half_moon_motor_angle = Serial.parseInt();//input the angle
   Serial.print("your department angle is: ");//print message 
-  Serial.println(n);  
-  half_moon.write(n); //set angle
+  Serial.println(half_moon_motor_angle);  
+  half_moon.write(half_moon_motor_angle); //set angle
 }
 void push_motor_control(){
   for(int i=0;i<179;i++){
