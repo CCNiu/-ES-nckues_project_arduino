@@ -32,11 +32,11 @@ void loop(){
   // test
   // zero_servo();
   // gogogo
-  PIKACHU();
-  half_moon_control();//設定仰角角度
+  // PIKACHU();
+   half_moon_control();//設定仰角角度
   // delay(10000);
   // catch_servo_control();//將球抓下來
-  push_motor_control();//推出去
+  // push_motor_control();//推出去
   //射出去
 }
 void half_moon_control(){   //0~65
@@ -49,6 +49,7 @@ void half_moon_control(){   //0~65
   Serial.print("your department angle is: ");//print message 
   Serial.println(half_moon_motor_angle);  
   half_moon.write(half_moon_motor_angle); //set angle
+  delay(100);
 }
 
 void catch_servo_control(){ //catch the ball from the top
@@ -60,11 +61,15 @@ void catch_servo_control(){ //catch the ball from the top
   } 
 }
 void push_motor_control(){    //push the ball to the DC motor
-  for(int i=0;i<179;i++){
-    push_servo.write(i);      //push
+  for(int p=0;p<60;p++){
+    push_servo.write(p);      //push
+    delay(10);
+    Serial.println(p);
   }
-  for(int i=179;i>0;i--){
-    push_servo.write(i);    //recover
+  for(int p=60;p>0;p--){
+    push_servo.write(p);    //recover
+    delay(10);
+    Serial.println(p);
   } 
 }
 
