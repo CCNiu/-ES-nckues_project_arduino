@@ -25,11 +25,11 @@ void setup() {
   catch_servo.attach(4);
   pinMode(7,OUTPUT);//方向控制
   pinMode(8,OUTPUT);
-  BT.begin(9600);//藍芽鮑率
+  BT.begin(38400);//藍芽鮑率
   catch_servo.write(0);
   push_servo.write(0); 
+  half_moon.write(0);
 }
-
 void loop(){
   // put your main code here, to run repeatedly:
   if (BT.available()){
@@ -38,25 +38,32 @@ void loop(){
   }
   switch ( command ){
     case 'U' : 
-      if(half_moon_angle){
+      if(half_moon_angle < 60){
         half_moon_angle ++;
         half_moon.write(half_moon_angle);
         Serial.println( half_moon_angle );
+        delay(20);
+        command = "Z";
+        break;
       }
+      
       break;
     case 'D' :
-      if(half_moon_angle <= 0){
+      if(half_moon_angle > 0){
         half_moon_angle --;
         half_moon.write(half_moon_angle);
         Serial.println( half_moon_angle );
+        delay(20);
+        command = "Z";
+        break;
       }
       break;
     case 'F' :  //前進
       digitalWrite(7,HIGH); 
       digitalWrite(8,LOW);
       if(L_i<255 &&R_i<255) {
-        L_i++;
-        R_i++;
+        L_i+=5;
+        R_i+=5;
         analogWrite(left_motor_PWM,L_i);
         analogWrite(right_motor_PWM,R_i);
         delay(10);
@@ -68,55 +75,9 @@ void loop(){
       break;
     case 'L' :  //左轉
       if(R_i<255) {
-        R_i++;
-        L_i=R_i/5;
+        R_i+=5;
+        L_i=0;
         analogWrite(left_motor_PWM,L_i);
-        analogWrite(right_motor_PWM,R_i);
-        delay(10);
-      }
-      analogWrite(left_motor_PWM,L_i);
-      analogWrite(right_motor_PWM,R_i);
-      // Serial.println( L_i );
-      // Serial.println( R_i );
-      break;
-    case 'R' :  //右轉
-    if(L_i<255) {
-        L_i++;
-        R_i=L_i/5;
-        analogWrite(left_motor_PWM,L_i);
-        analogWrite(right_motor_PWM,R_i);
-        delay(10);
-      }
-      analogWrite(left_motor_PWM,L_i);
-      analogWrite(right_motor_PWM,R_i);
-      break;  
-    case 'B' :  //後退
-      digitalWrite(7,LOW);
-      digitalWrite(8,HIGH);
-      if(L_i<255 &&R_i<255) {
-        L_i++;
-        R_i++;
-        analogWrite(left_motor_PWM,L_i);
-        analogWrite(right_motor_PWM,R_i);
-        delay(10);
-      }
-      analogWrite(left_motor_PWM,L_i);
-      analogWrite(right_motor_PWM,R_i);
-      break;  
-    case 'N' :  //抓球
-      catch_servo_control();
-      break;
-    case 'P' : //推球
-      push_motor_control();
-      break;
-    case 'S' : //停止
-      if(L_i>0){
-        L_i--;
-        analogWrite(left_motor_PWM,L_i);
-        delay(10);
-      }
-      if(R_i>0){
-        R_i--;
         analogWrite(right_motor_PWM,R_i);
         delay(10);
       }
@@ -125,9 +86,66 @@ void loop(){
       Serial.println( L_i );
       Serial.println( R_i );
       break;
-    case 'K': //待機
+    case 'R' :  //右轉
+    if(L_i<255) {
+        L_i+=5;
+        R_i=0;
+        analogWrite(left_motor_PWM,L_i);
+        analogWrite(right_motor_PWM,R_i);
+        delay(10);
+      }
+      analogWrite(left_motor_PWM,L_i);
+      analogWrite(right_motor_PWM,R_i);
+      Serial.println( L_i );
+      Serial.println( R_i );
+      break;  
+    case 'B' :  //後退
+      digitalWrite(7,LOW);
+      digitalWrite(8,HIGH);
+      if(L_i<255 &&R_i<255) {
+        L_i+=5;
+        R_i+=5;
+        analogWrite(left_motor_PWM,L_i);
+        analogWrite(right_motor_PWM,R_i);
+        delay(10);
+      }
+      analogWrite(left_motor_PWM,L_i);
+      analogWrite(right_motor_PWM,R_i);
+      Serial.println( L_i );
+      Serial.println( R_i );
+      break;  
+    case 'A' :  //抓球
+      catch_servo_control();
+      break;
+    case 'P' : //推球
+      push_motor_control();
+      break;
+    case 'S' : //停止
+      if(L_i>0){
+        L_i-=5;
+        analogWrite(left_motor_PWM,L_i);
+        delay(10);
+      }
+      if(R_i>0){
+        R_i-=5;
+        analogWrite(right_motor_PWM,R_i);
+        delay(10);
+      }
+      analogWrite(left_motor_PWM,L_i);
+      analogWrite(right_motor_PWM,R_i);
+      // Serial.println( L_i );
+      // Serial.println( R_i );
+      break;
+    case 'Z': //待機
       delay(10);
       break;
+    case 'r' ://歸零
+      half_moon_angle = 0;
+      catch_servo.write(0);
+      push_servo.write(0); 
+      half_moon.write(half_moon_angle);
+      analogWrite(left_motor_PWM,0);
+      analogWrite(right_motor_PWM,0);
   }
   int L_i = 0;
   int R_i = 0;
