@@ -4,8 +4,7 @@ const int In1_A = 1;  //A_output1
 const int In2_A = 2;  //A_output2
 const int In1_B = 3;  //B_output1
 const int In2_B = 4;  //B_output2
-#define L298N_ENA 10  //for L298N_A PWM signal
-#define L298N_ENB 11  //for L298N_B PWM signal
+
 Servo myservo;        //test dervo 
 Servo half_moon; 
 Servo push_servo;
