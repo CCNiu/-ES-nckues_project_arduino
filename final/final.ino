@@ -9,6 +9,7 @@ int half_moon_angle = 0;        //initial servo angle
 int n = 0;
 int L_i = 0;
 int R_i = 0;
+
 char command;
 const int left_motor_PWM = 5;
 const int right_motor_PWM = 6;
@@ -25,7 +26,7 @@ void setup() {
   catch_servo.attach(4);
   pinMode(7,OUTPUT);//方向控制
   pinMode(8,OUTPUT);
-  BT.begin(38400);//藍芽鮑率
+  BT.begin(9600);//藍芽鮑率
   catch_servo.write(0);
   push_servo.write(0); 
   half_moon.write(0);
@@ -38,7 +39,7 @@ void loop(){
   }
   switch ( command ){
     case 'U' : 
-      if(half_moon_angle < 60){
+      if(half_moon_angle < 45){
         half_moon_angle ++;
         half_moon.write(half_moon_angle);
         Serial.println( half_moon_angle );
@@ -70,8 +71,8 @@ void loop(){
       }
       analogWrite(left_motor_PWM,L_i);
       analogWrite(right_motor_PWM,R_i);
-      Serial.println( L_i );
-      Serial.println( R_i );
+      // Serial.println( L_i );
+      // Serial.println( R_i );
       break;
     case 'L' :  //左轉
       if(R_i<255) {
@@ -83,8 +84,8 @@ void loop(){
       }
       analogWrite(left_motor_PWM,L_i);
       analogWrite(right_motor_PWM,R_i);
-      Serial.println( L_i );
-      Serial.println( R_i );
+      // Serial.println( L_i );
+      // Serial.println( R_i );
       break;
     case 'R' :  //右轉
     if(L_i<255) {
@@ -96,8 +97,8 @@ void loop(){
       }
       analogWrite(left_motor_PWM,L_i);
       analogWrite(right_motor_PWM,R_i);
-      Serial.println( L_i );
-      Serial.println( R_i );
+      // Serial.println( L_i );
+      // Serial.println( R_i );
       break;  
     case 'B' :  //後退
       digitalWrite(7,LOW);
@@ -111,8 +112,8 @@ void loop(){
       }
       analogWrite(left_motor_PWM,L_i);
       analogWrite(right_motor_PWM,R_i);
-      Serial.println( L_i );
-      Serial.println( R_i );
+      // Serial.println( L_i );
+      // Serial.println( R_i );
       break;  
     case 'A' :  //抓球
       catch_servo_control();
@@ -162,14 +163,17 @@ void catch_servo_control(){ //catch the ball from the top
   command = "K";
 }
 void push_motor_control(){    //push the ball to the DC motor
-  for(int p=0;p<60;p++){
+  n = 35+(half_moon_angle/3);
+  for(int p=0;p<n;p++){
     push_servo.write(p);      //push
-    delay(10);
+    delay(100);
     // Serial.println(p);
   }
-  for(int p=60;p>0;p--){
+  for(int p=n;p>0;p--){
     push_servo.write(p);    //recover
     delay(10);
     // Serial.println(p);
   } 
+  command = "K";
+
 }

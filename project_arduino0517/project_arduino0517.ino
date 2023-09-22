@@ -16,11 +16,11 @@ void setup(){
   Serial.begin(115200);   //set baud rate
   pinMode(In1_A, OUTPUT);  
   pinMode(In2_A, OUTPUT);
-  pinMode(L298N_ENA, OUTPUT);  
+  // pinMode(L298N_ENA, OUTPUT);  
 
   pinMode(In1_B, OUTPUT);
   pinMode(In2_B, OUTPUT);
-  pinMode(L298N_ENB, OUTPUT);  
+  // pinMode(L298N_ENB, OUTPUT);  
 
   myservo.attach(5);      //test servo pin
   half_moon.attach(6);
@@ -109,15 +109,15 @@ void zero_servo(){
 void teaa(){          //L298N PWM  test
   Serial.println( "MIN");   //set pwm minium
   for(int i =50;i<256;i++){  //increase pwm
-      analogWrite(L298N_ENA,i);
-      analogWrite(L298N_ENB,i);
+      // analogWrite(L298N_ENA,i);
+      // analogWrite(L298N_ENB,i);
       Serial.println(i);
       delay(100);
     }
   Serial.println( "MAX");     //set pwm signal maxium
   for(int i =255;i>=50;--i){    //decrease pwm
-    analogWrite(L298N_ENA,i);
-    analogWrite(L298N_ENB,i);
+    // analogWrite(L298N_ENA,i);
+    // analogWrite(L298N_ENB,i);
     Serial.println(i);
     delay(100);
     }
